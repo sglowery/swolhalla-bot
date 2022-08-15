@@ -1,1 +1,1 @@
-web: java -jar build/libs/swolhalla-bot.jar --server.port=$PORT
+web: java -jar build/libs/swolhalla-bot-0.1.jar --server.port=$PORT
