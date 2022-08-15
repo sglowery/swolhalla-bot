@@ -43,7 +43,7 @@ fun main(args: Array<String>) {
         token = botToken
         webhook {
             val port = System.getenv(PORT) ?: "5000"
-            url = "https://${herokuAppName}.herokuapp.com"
+            url = "https://${herokuAppName}.herokuapp.com/${botToken}"
             ipAddress = "0.0.0.0:$port"
 
         }
