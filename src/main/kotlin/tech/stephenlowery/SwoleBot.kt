@@ -4,8 +4,11 @@ import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.webhook
 
 const val TELEGRAM_TOKEN_VAR = "TELEGRAM_TOKEN"
+const val HEROKU_APP_NAME_VAR = "HEROKU_APP_NAME"
+const val PORT = "PORT"
 
 val bodyweightWorkouts = listOf(
     BodyweightWorkout("jumping jacks", RepUnit.SELF_NAMED, 20..50),
@@ -26,8 +29,15 @@ val bodyweightWorkouts = listOf(
 )
 
 fun main(args: Array<String>) {
+    val herokuAppName = System.getenv(HEROKU_APP_NAME_VAR)
     val bot = bot {
         token = System.getenv(TELEGRAM_TOKEN_VAR)
+        webhook {
+            val port = System.getenv(PORT) ?: "5000"
+            url = "https://${herokuAppName}.herokuapp.com"
+            ipAddress = "0.0.0.0:$port"
+
+        }
         dispatch {
             command("workout") {
                 val randomWorkout = bodyweightWorkouts.random()
@@ -40,5 +50,5 @@ fun main(args: Array<String>) {
             }
         }
     }
-    bot.startPolling()
+    bot.startWebhook()
 }
