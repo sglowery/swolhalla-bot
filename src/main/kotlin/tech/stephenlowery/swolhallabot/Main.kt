@@ -5,6 +5,13 @@ import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.webhook
+import io.ktor.application.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 
 const val TELEGRAM_TOKEN_VAR = "TELEGRAM_TOKEN"
 const val HEROKU_APP_NAME_VAR = "HEROKU_APP_NAME"
@@ -38,6 +45,7 @@ fun main(args: Array<String>) {
             val port = System.getenv(PORT) ?: "5000"
             url = "https://${herokuAppName}.herokuapp.com/${botToken}"
             ipAddress = "0.0.0.0:$port"
+
         }
         dispatch {
             command("workout") {
@@ -51,5 +59,20 @@ fun main(args: Array<String>) {
             }
         }
     }
+    println("starting webhook")
     bot.startWebhook()
+
+    val env = applicationEngineEnvironment {
+        module {
+            routing {
+                post("/${botToken}") {
+                    val response = call.receiveText()
+                    bot.processUpdate(response)
+                    call.respond(HttpStatusCode.OK)
+                }
+            }
+        }
+    }
+
+    embeddedServer(Netty, env).start(wait = true)
 }
