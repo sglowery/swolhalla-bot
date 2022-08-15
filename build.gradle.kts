@@ -23,6 +23,11 @@ tasks.test {
     useJUnitPlatform()
 }
 
+tasks.create("stage") {
+    dependsOn("build", "clean")
+    mustRunAfter("clean")
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
