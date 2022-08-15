@@ -1,1 +1,1 @@
-web: find ./build/libs/ -maxdepth 1 -name *.jar | xargs java -jar
+worker: find ./build/libs/ -maxdepth 1 -name *.jar | xargs java -jar
