@@ -4,7 +4,6 @@ import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
-import com.github.kotlintelegrambot.webhook
 
 const val TELEGRAM_TOKEN_VAR = "TELEGRAM_TOKEN"
 
@@ -29,7 +28,6 @@ val bodyweightWorkouts = listOf(
 fun main(args: Array<String>) {
     val bot = bot {
         token = System.getenv(TELEGRAM_TOKEN_VAR)
-        webhook {  }
         dispatch {
             command("workout") {
                 val randomWorkout = bodyweightWorkouts.random()
