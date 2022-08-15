@@ -24,15 +24,23 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.create("stage") {
-    dependsOn("build", "clean")
-    mustRunAfter("clean")
+task<Jar>("fatJar") {
+    manifest {
+        attributes(mapOf("Main-Class" to "tech.stephenlowery.swolhallabot.MainKt"))
+    }
+    from(configurations.runtimeClasspath
+        .get()
+        .filter { it.exists() }
+        .map { if (it.isDirectory) it else zipTree(it) }
+    )
+    with(tasks["jar"] as CopySpec)
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "tech.stephenlowery.MainKt"
-    }
+tasks.create("stage") {
+    dependsOn("clean", "fatJar")
+    mustRunAfter("clean")
 }
 
 tasks.withType<KotlinCompile> {
