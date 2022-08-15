@@ -17,6 +17,7 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("org.spockframework.spock:spock-core:spock-2.1")
     implementation("io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:6.0.7")
+    implementation("io.ktor:ktor-server-netty:1.6.3")
 }
 
 tasks.test {
@@ -26,6 +27,12 @@ tasks.test {
 tasks.create("stage") {
     dependsOn("build", "clean")
     mustRunAfter("clean")
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "tech.stephenlowery.MainKt"
+    }
 }
 
 tasks.withType<KotlinCompile> {

@@ -1,4 +1,4 @@
-package tech.stephenlowery
+package tech.stephenlowery.swolhallabot
 
 import java.security.InvalidParameterException
 
