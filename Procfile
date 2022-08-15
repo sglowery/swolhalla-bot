@@ -1,1 +1,1 @@
-web: java -jar build/libs/swolhalla-bot-0.1.jar --server.port=$PORT
+web: find ./build/libs/ -maxdepth 1 -name *.jar | xargs java -jar
