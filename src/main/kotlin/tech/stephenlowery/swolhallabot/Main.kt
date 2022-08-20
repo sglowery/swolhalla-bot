@@ -7,32 +7,12 @@ import com.github.kotlintelegrambot.entities.ChatId
 
 const val TELEGRAM_TOKEN_VAR = "TELEGRAM_TOKEN"
 
-val bodyweightWorkouts = listOf(
-    BodyweightWorkout("jumping jacks", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("sit ups", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("crunches", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("push ups", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("mountain climbers", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("Russian twists", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("plank", RepUnit.SECOND, 20..50, true),
-    BodyweightWorkout("leg lifts", RepUnit.SECOND, 20..50),
-    BodyweightWorkout("squats", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("lunges", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("door frame rows", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("wall sit", RepUnit.SECOND, 20..50, true),
-    BodyweightWorkout("burpees", RepUnit.SELF_NAMED, 20..50),
-    BodyweightWorkout("bear crawl", RepUnit.STEP, 20..50),
-    BodyweightWorkout("lizard crawl", RepUnit.STEP, 20..50),
-)
-
-
 fun main(args: Array<String>) {
-    val botToken = System.getenv(TELEGRAM_TOKEN_VAR)
     val bot = bot {
-        token = botToken
+        token = System.getenv(TELEGRAM_TOKEN_VAR)
         dispatch {
             command("workout") {
-                val randomWorkout = bodyweightWorkouts.random()
+                val randomWorkout = message.from?.id?.let { WorkoutHandler.getWorkoutForUser(it) } ?: return@command
                 val reply = "You must $randomWorkout"
                 bot.sendMessage(
                     chatId = ChatId.fromId(message.chat.id),
